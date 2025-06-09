@@ -1,0 +1,35 @@
+name: 'Trigger ADO Pipeline'
+description: 'Triggers an Azure DevOps pipeline from a GitHub Action'
+inputs:
+  ado_org:
+    required: false
+    default: 'hmcts-cpp'
+    description: "Azure DevOps organisation name"
+  ado_project:
+    required: false
+    default: 'cpp-apps'
+    description: "Azure DevOps project name"
+  pipeline_id:
+    required: true
+    description: "ID of the Azure DevOps pipeline to trigger"
+  ado_pat:
+    required: true
+    description: "Azure DevOps Personal Access Token (PAT) used for authentication"
+  template_parameters:
+    required: true
+    description: "JSON string of key-value pairs to pass as template parameters to the pipeline"
+  ref_name:
+    required: false
+    default: 'refs/heads/main'
+    description: 'Git reference (branch) to use in the triggered pipeline'
+  api_version:
+    required: false
+    default: '7.0'
+    description: "API version to use for Azure DevOps pipeline trigger"
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        chmod +x ${{ github.action_path }}/run.sh
+        ${{ github.action_path }}/run.sh
+      shell: bash
