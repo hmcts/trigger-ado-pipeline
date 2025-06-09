@@ -57,6 +57,14 @@ pip install -r requirements.txt
 
 Dependencies are minimal and listed in `requirements.txt`.
 
+### Run Tests
+
+To ensure the action works as expected, you can run the tests:
+
+```bash
+python -m unittest discover
+```
+
 ## Floating Versions and Upgrade Strategy
 
 Consumers of this GitHub Action often want to use a floating version, i.e. `@v1`, rather than pinning to a specific version, i.e. `@v1.0.1`.  
