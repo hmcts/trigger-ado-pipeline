@@ -87,7 +87,7 @@ class TestTriggerPipeline(unittest.TestCase):
     def test_fails_with_missing_required_env_vars(self):
         with self.assertRaises(SystemExit) as cm, patch('builtins.print') as mock_print:
             trigger_pipeline.main()
-        mock_print.assert_any_call("Missing required environment variables")
+        mock_print.assert_any_call("Missing required inputs: ADO_ORG, ADO_PROJECT, PIPELINE_ID, ADO_PAT, REF_NAME, API_VERSION, TEMPLATE_PARAMETERS")
         self.assertEqual(cm.exception.code, 1)
 
 if __name__ == "__main__":

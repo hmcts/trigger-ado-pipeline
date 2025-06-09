@@ -11,9 +11,21 @@ def main():
     ado_pat = os.getenv("INPUT_ADO_PAT")
     repo_ref_name = os.getenv("INPUT_REF_NAME")
     ado_api_version = os.getenv("INPUT_API_VERSION")
+    template_parameters_raw = os.getenv("INPUT_TEMPLATE_PARAMETERS")
 
-    if not all([ado_org, ado_project, ado_pipeline_id, ado_pat, repo_ref_name, ado_api_version]):
-        print("Missing required environment variables")
+    required_vars = {
+        "ADO_ORG": ado_org,
+        "ADO_PROJECT": ado_project,
+        "PIPELINE_ID": ado_pipeline_id,
+        "ADO_PAT": ado_pat,
+        "REF_NAME": repo_ref_name,
+        "API_VERSION": ado_api_version,
+        "TEMPLATE_PARAMETERS": template_parameters_raw
+    }
+
+    missing = [name for name, value in required_vars.items() if not value]
+    if missing:
+        print(f"Missing required inputs: {', '.join(missing)}")
         sys.exit(1)
 
     print(f"Parameters:")
@@ -22,8 +34,8 @@ def main():
     print(f"Pipeline ID = {ado_pipeline_id}")
     print(f"Ref Name = {repo_ref_name}")
     print(f"API Version = {ado_api_version}")
+    print(f"Template Parameters = {template_parameters_raw}")
 
-    template_parameters_raw = os.getenv("INPUT_TEMPLATE_PARAMETERS", "{}")
     template_parameters = {}
     try:
         template_parameters = json.loads(template_parameters_raw) if template_parameters_raw else {}
