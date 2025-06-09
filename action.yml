@@ -31,3 +31,11 @@ runs:
   steps:
     - run: python3 ${{ github.action_path }}/trigger_pipeline.py
       shell: bash
+      env:
+        INPUT_ADO_ORG: ${{ inputs.ado_org }}
+        INPUT_ADO_PROJECT: ${{ inputs.ado_project }}
+        INPUT_PIPELINE_ID: ${{ inputs.pipeline_id }}
+        INPUT_ADO_PAT: ${{ inputs.ado_pat }}
+        INPUT_TEMPLATE_PARAMETERS: ${{ inputs.template_parameters }}
+        INPUT_REF_NAME: ${{ inputs.ref_name }}
+        INPUT_API_VERSION: ${{ inputs.api_version }}
