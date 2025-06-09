@@ -1,9 +1,11 @@
-# trigger-ado-pipeline
-Custom Github Action to trigger ADO Pipeline
+<div style="display: flex; align-items: center; justify-content: center; gap: 1rem;">
+  <img src="./assets/hmcts-logo.png" alt="HM Courts & Tribunals Service logo" width="120" />
+  <h1 style="margin: 0;">Trigger ADO Pipeline GitHub Action</h1>
+</div>
 
-# trigger-ado-pipeline
+Custom GitHub Action to trigger an Azure DevOps pipeline.
 
-Custom GitHub Action to trigger an Azure DevOps pipeline using a personal access token (PAT).
+Ideally, this action wouldn’t be necessary, but the [Azure Pipelines Action](https://github.com/marketplace/actions/azure-pipelines-action) currently only supports passing variables, not parameters. Once support for parameters is added, this action will no longer be needed and will be archived.
 
 ## Inputs
 
