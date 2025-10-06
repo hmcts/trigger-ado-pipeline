@@ -26,6 +26,10 @@ inputs:
     required: false
     default: '7.0'
     description: "API version to use for Azure DevOps pipeline trigger"
+  release_candidate:
+    required: false
+    default: false
+    description: "Indicates whether the artefact is considered a release candidate."
 runs:
   using: "composite"
   steps:
@@ -39,3 +43,4 @@ runs:
         INPUT_TEMPLATE_PARAMETERS: ${{ inputs.template_parameters }}
         INPUT_REF_NAME: ${{ inputs.ref_name }}
         INPUT_API_VERSION: ${{ inputs.api_version }}
+        INPUT_RELEASE_CANDIDATE: ${{ inputs.release_candidate }}
