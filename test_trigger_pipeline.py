@@ -1,5 +1,6 @@
 import os
 import json
+import tempfile
 import unittest
 from unittest.mock import patch, MagicMock
 from base64 import b64encode
@@ -52,6 +53,40 @@ class TestTriggerPipeline(unittest.TestCase):
         }
 
         mock_post.assert_called_once_with(expected_url, headers=expected_headers, json=expected_payload)
+
+    @patch('requests.post')
+    @patch.dict(os.environ, {
+        'INPUT_ADO_ORG': 'test-org',
+        'INPUT_ADO_PROJECT': 'test-project',
+        'INPUT_PIPELINE_ID': '123',
+        'INPUT_ADO_PAT': 'test-pat',
+        'INPUT_REF_NAME': 'refs/heads/test-branch',
+        'INPUT_API_VERSION': '7.1',
+        'INPUT_TEMPLATE_PARAMETERS': json.dumps({
+            'GROUP_ID': 'uk.gov.hmcts.test',
+            'ARTIFACT_ID': 'test-artifact',
+            'ARTIFACT_VERSION': '0.0.1'
+        })
+    }, clear=True)
+    def test_run_id_written_to_github_output(self, mock_post):
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {"status": "queued", "id": 9876543}
+        mock_post.return_value = mock_response
+
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+            output_file = f.name
+
+        try:
+            with patch.dict(os.environ, {'GITHUB_OUTPUT': output_file}), \
+                 patch('builtins.print'):
+                trigger_pipeline.main()
+
+            with open(output_file, 'r') as f:
+                content = f.read()
+            self.assertIn("run_id=9876543", content)
+        finally:
+            os.unlink(output_file)
 
     @patch.dict(os.environ, {
         'INPUT_ADO_ORG': 'test-org',

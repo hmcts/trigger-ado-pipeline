@@ -76,9 +76,18 @@ def main():
     except ValueError:
         print("Response Text:")
         print(response.text)
+        response_json = None
 
     if response.status_code != 200:
         sys.exit(1)
+
+    if response_json and "id" in response_json:
+        run_id = str(response_json["id"])
+        print(f"Pipeline run ID: {run_id}")
+        github_output = os.getenv("GITHUB_OUTPUT")
+        if github_output:
+            with open(github_output, "a") as f:
+                f.write(f"run_id={run_id}\n")
 
 if __name__ == "__main__":
     main()
