@@ -30,10 +30,15 @@ inputs:
     required: false
     default: false
     description: "Indicates whether the artefact is considered a release candidate."
+outputs:
+  run_id:
+    description: "The ID of the triggered pipeline run"
+    value: ${{ steps.trigger.outputs.run_id }}
 runs:
   using: "composite"
   steps:
-    - run: python3 ${{ github.action_path }}/trigger_pipeline.py
+    - id: trigger
+      run: python3 ${{ github.action_path }}/trigger_pipeline.py
       shell: bash
       env:
         INPUT_ADO_ORG: ${{ inputs.ado_org }}
