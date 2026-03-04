@@ -81,13 +81,23 @@ def main():
     if response.status_code != 200:
         sys.exit(1)
 
-    if response_json and "id" in response_json:
-        run_id = str(response_json["id"])
-        print(f"Pipeline run ID: {run_id}")
-        github_output = os.getenv("GITHUB_OUTPUT")
-        if github_output:
-            with open(github_output, "a") as f:
-                f.write(f"run_id={run_id}\n")
+    if response_json is None:
+        print("Failed to parse JSON response from API; cannot determine pipeline run ID.")
+        sys.exit(1)
 
+    if "id" not in response_json:
+        print("API response JSON does not contain 'id' field; cannot determine pipeline run ID.")
+        sys.exit(1)
+
+    if not isinstance(response_json["id"], (str, int)):
+        print(f"API response JSON 'id' field has invalid type: {type(response_json['id']).__name__}; expected string or integer.")
+        sys.exit(1)
+
+    run_id = str(response_json["id"])
+    print(f"Pipeline run ID: {run_id}")
+    github_output = os.getenv("GITHUB_OUTPUT")
+    if github_output:
+        with open(github_output, "a") as f:
+            f.write(f"run_id={run_id}\n")
 if __name__ == "__main__":
     main()
